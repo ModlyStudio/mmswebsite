@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minecraft Mod Studio — Crie seu Resource Pack sem código</title>
+  <title>Minecraft Mod Studio</title>
   <meta name="description" content="Crie Resource Packs para Minecraft de forma visual, sem precisar de código. Em desenvolvimento." />
   <link rel="icon" type="image/png" href="mmslogosimbolodc.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,444 +22,148 @@
       --muted:    #606060;
       --amber:    #c89040;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; height: 56px;
-      background: rgba(17,17,17,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 56px; background: rgba(17,17,17,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 28px; height: 28px; }
     .nav-logo span { font-weight: 700; font-size: 15px; color: var(--text); letter-spacing: -0.3px; }
     .nav-links { display: flex; gap: 32px; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      background: var(--green); color: #0a1a04; font-weight: 700;
-      font-size: 13px; padding: 7px 18px; border-radius: 6px;
-      text-decoration: none; transition: background 0.2s, transform 0.15s;
-    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-cta { background: var(--green); color: #0a1a04; font-weight: 700; font-size: 13px; padding: 7px 18px; border-radius: 6px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
     .nav-cta:hover { background: var(--green-lt); transform: translateY(-1px); }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: grid; place-items: center;
-      position: relative; overflow: hidden;
-      padding: 80px 20px 60px;
-    }
+    /* LANG SWITCHER */
+    .lang-switcher { position: relative; }
+    .lang-btn { display: flex; align-items: center; gap: 6px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .lang-btn:hover { border-color: #444; background: #222; }
+    .lang-dropdown { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; min-width: 160px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 200; }
+    .lang-switcher.open .lang-dropdown { display: block; }
+    .lang-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
+    .lang-option:hover { background: rgba(255,255,255,0.05); }
+    .lang-option.active { color: var(--green); }
 
-    /* Grid background */
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(106,184,74,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(106,184,74,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-    }
-    /* Green glow */
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(106,184,74,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* HERO */
+    .hero { min-height: 100vh; display: grid; place-items: center; position: relative; overflow: hidden; padding: 80px 20px 60px; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(106,184,74,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(106,184,74,0.04) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+    .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(106,184,74,0.12) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 800px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(106,184,74,0.1); border: 1px solid rgba(106,184,74,0.3); color: var(--green); font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px; letter-spacing: 0.5px; margin-bottom: 32px; animation: fadeDown 0.6s ease both; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.08; letter-spacing: -2px; color: #fff; margin-bottom: 24px; animation: fadeDown 0.6s 0.1s ease both; }
+    .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--green) 0%, var(--green-lt) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.15rem; color: #888; max-width: 520px; margin: 0 auto 40px; font-weight: 400; line-height: 1.7; animation: fadeDown 0.6s 0.2s ease both; }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; animation: fadeDown 0.6s 0.3s ease both; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; padding: 12px 26px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s, background 0.2s, transform 0.15s; }
+    .btn-secondary:hover { border-color: #444; background: rgba(255,255,255,0.04); transform: translateY(-2px); }
 
-    .hero-inner {
-      position: relative; z-index: 1;
-      text-align: center; max-width: 800px;
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(106,184,74,0.1); border: 1px solid rgba(106,184,74,0.3);
-      color: var(--green); font-size: 12px; font-weight: 600;
-      padding: 5px 14px; border-radius: 100px; letter-spacing: 0.5px;
-      margin-bottom: 32px;
-      animation: fadeDown 0.6s ease both;
-    }
-    .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--green);
-      animation: pulse 2s infinite;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      font-weight: 900;
-      line-height: 1.08;
-      letter-spacing: -2px;
-      color: #fff;
-      margin-bottom: 24px;
-      animation: fadeDown 0.6s 0.1s ease both;
-    }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--green) 0%, var(--green-lt) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      font-size: 1.15rem; color: #888; max-width: 520px; margin: 0 auto 40px;
-      font-weight: 400; line-height: 1.7;
-      animation: fadeDown 0.6s 0.2s ease both;
-    }
-
-    .hero-actions {
-      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-      animation: fadeDown 0.6s 0.3s ease both;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--green); color: #0a1a04;
-      font-weight: 700; font-size: 14px; padding: 12px 26px;
-      border-radius: 8px; text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 0 24px rgba(106,184,74,0.25);
-    }
-    .btn-primary:hover {
-      background: var(--green-lt); transform: translateY(-2px);
-      box-shadow: 0 0 40px rgba(106,184,74,0.4);
-    }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent; color: var(--text);
-      font-weight: 600; font-size: 14px; padding: 12px 26px;
-      border-radius: 8px; text-decoration: none;
-      border: 1px solid var(--border);
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-    .btn-secondary:hover {
-      border-color: #444; background: rgba(255,255,255,0.04);
-      transform: translateY(-2px);
-    }
-
-    /* ── APP SCREENSHOT MOCKUP ── */
-    .hero-mockup {
-      position: relative; margin-top: 64px;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-    .mockup-window {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-      max-width: 860px; margin: 0 auto;
-    }
-    .mockup-titlebar {
-      background: #161616;
-      border-bottom: 1px solid var(--border);
-      padding: 10px 16px;
-      display: flex; align-items: center; gap: 8px;
-    }
+    /* MOCKUP */
+    .hero-mockup { position: relative; margin-top: 64px; animation: fadeUp 0.8s 0.4s ease both; }
+    .mockup-window { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04); max-width: 860px; margin: 0 auto; }
+    .mockup-titlebar { background: #161616; border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
     .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot-r { background: #ff5f57; }
-    .dot-y { background: #febc2e; }
-    .dot-g { background: #28c840; }
-    .mockup-title {
-      margin-left: 8px; font-size: 12px; color: var(--muted); font-weight: 500;
-    }
-    .mockup-body {
-      display: grid; grid-template-columns: 200px 1fr;
-      min-height: 380px;
-    }
-    .mock-sidebar {
-      background: #141414; border-right: 1px solid var(--border);
-      padding: 12px 0;
-    }
-    .mock-sidebar-head {
-      font-size: 9px; font-weight: 700; color: #404040;
-      letter-spacing: 1px; padding: 0 14px 8px; text-transform: uppercase;
-    }
-    .mock-tile {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; cursor: pointer;
-      transition: background 0.15s;
-    }
+    .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+    .mockup-title { margin-left: 8px; font-size: 12px; color: var(--muted); font-weight: 500; }
+    .mockup-body { display: grid; grid-template-columns: 200px 1fr; min-height: 380px; }
+    .mock-sidebar { background: #141414; border-right: 1px solid var(--border); padding: 12px 0; }
+    .mock-sidebar-head { font-size: 9px; font-weight: 700; color: #404040; letter-spacing: 1px; padding: 0 14px 8px; text-transform: uppercase; }
+    .mock-tile { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.15s; }
     .mock-tile:hover { background: rgba(255,255,255,0.03); }
     .mock-tile.active { background: rgba(106,184,74,0.08); border-left: 2px solid var(--green); }
-    .mock-thumb {
-      width: 36px; height: 36px; border-radius: 5px;
-      background: var(--bg3); border: 1px solid var(--border);
-      display: grid; place-items: center; font-size: 18px;
-      flex-shrink: 0;
-    }
+    .mock-thumb { width: 36px; height: 36px; border-radius: 5px; background: var(--bg3); border: 1px solid var(--border); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
     .mock-thumb.edited { border-color: var(--green-dk); }
-    .mock-thumb-badge {
-      font-size: 9px; color: var(--green); font-weight: 700;
-      letter-spacing: 0.3px;
-    }
     .mock-tile-info { flex: 1; min-width: 0; }
     .mock-tile-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mock-tile-cat { font-size: 9px; color: var(--muted); }
     .mock-tile-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-
-    .mock-editor {
-      display: flex; flex-direction: column;
-    }
-    .mock-tabs {
-      display: flex; gap: 0;
-      border-bottom: 1px solid var(--border);
-      background: #161616;
-    }
-    .mock-tab {
-      padding: 8px 18px; font-size: 11px; color: var(--muted);
-      border-right: 1px solid var(--border); cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .mock-editor { display: flex; flex-direction: column; }
+    .mock-tabs { display: flex; border-bottom: 1px solid var(--border); background: #161616; }
+    .mock-tab { padding: 8px 18px; font-size: 11px; color: var(--muted); border-right: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .mock-tab.active { color: var(--text); background: var(--bg2); border-bottom: 2px solid var(--green); }
-    .mock-canvas-area {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      gap: 32px; padding: 24px;
-    }
-    .mock-pixel-grid {
-      display: grid; grid-template-columns: repeat(16, 1fr);
-      gap: 1px; width: 224px; height: 224px;
-      background: #1a1a1a; border: 1px solid var(--border); border-radius: 6px;
-      overflow: hidden;
-    }
-    .mock-pixel {
-      aspect-ratio: 1;
-    }
-    .mock-right-panel {
-      display: flex; flex-direction: column; gap: 12px; width: 110px;
-    }
+    .mock-canvas-area { flex: 1; display: flex; align-items: center; justify-content: center; gap: 32px; padding: 24px; }
+    .mock-pixel-grid { display: grid; grid-template-columns: repeat(16, 1fr); gap: 1px; width: 224px; height: 224px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .mock-pixel { aspect-ratio: 1; }
+    .mock-right-panel { display: flex; flex-direction: column; gap: 12px; width: 110px; }
     .mock-color-label { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
-    .mock-color-swatch {
-      width: 40px; height: 40px; border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-    .mock-palette {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px;
-    }
+    .mock-color-swatch { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--border); }
+    .mock-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
     .mock-pal-dot { width: 18px; height: 18px; border-radius: 3px; cursor: pointer; }
-    .mock-save-btn {
-      background: var(--green); color: #0a1a04;
-      font-size: 10px; font-weight: 700;
-      padding: 7px 10px; border-radius: 5px; text-align: center;
-      cursor: pointer;
-    }
+    .mock-save-btn { background: var(--green); color: #0a1a04; font-size: 10px; font-weight: 700; padding: 7px 10px; border-radius: 5px; text-align: center; cursor: pointer; }
 
-    /* ── FEATURES ── */
+    /* SECTIONS */
     section { padding: 96px 40px; }
-
-    .section-label {
-      font-size: 11px; font-weight: 700; color: var(--green);
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 800; letter-spacing: -1px;
-      color: #fff; margin-bottom: 16px; line-height: 1.15;
-    }
+    .section-label { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .section-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 16px; line-height: 1.15; }
     .section-sub { font-size: 1rem; color: #666; max-width: 480px; line-height: 1.7; }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1px;
-      margin-top: 64px;
-      border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden;
-      background: var(--border);
-    }
-    .feature-card {
-      background: var(--bg2);
-      padding: 32px;
-      transition: background 0.2s;
-    }
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; margin-top: 64px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--border); }
+    .feature-card { background: var(--bg2); padding: 32px; transition: background 0.2s; }
     .feature-card:hover { background: #1a1a1a; }
-    .feature-icon {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: rgba(106,184,74,0.12);
-      border: 1px solid rgba(106,184,74,0.2);
-      display: grid; place-items: center;
-      font-size: 20px; margin-bottom: 18px;
-    }
+    .feature-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(106,184,74,0.12); border: 1px solid rgba(106,184,74,0.2); display: grid; place-items: center; font-size: 20px; margin-bottom: 18px; }
     .feature-card h3 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .feature-card p  { font-size: 0.88rem; color: #666; line-height: 1.65; }
+    .feature-card p { font-size: 0.88rem; color: #666; line-height: 1.65; }
 
-    /* ── ROADMAP ── */
+    /* ROADMAP */
     .roadmap-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .roadmap-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px; margin-top: 48px;
-    }
-    .roadmap-sprint {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px;
-    }
-    .sprint-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-    }
-    .sprint-num {
-      width: 28px; height: 28px; border-radius: 7px;
-      font-size: 11px; font-weight: 800;
-      display: grid; place-items: center;
-    }
-    .sprint-done  { background: rgba(106,184,74,0.2); color: var(--green); }
-    .sprint-wip   { background: rgba(200,144,64,0.2); color: var(--amber); }
-    .sprint-next  { background: rgba(80,80,80,0.4); color: #666; }
+    .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 48px; }
+    .roadmap-sprint { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+    .sprint-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .sprint-num { width: 28px; height: 28px; border-radius: 7px; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+    .sprint-done { background: rgba(106,184,74,0.2); color: var(--green); }
+    .sprint-wip { background: rgba(200,144,64,0.2); color: var(--amber); }
+    .sprint-next { background: rgba(80,80,80,0.4); color: #666; }
     .sprint-title { font-size: 13px; font-weight: 700; color: #ccc; }
     .sprint-items { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .sprint-items li {
-      font-size: 12px; color: #666;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .sprint-items li::before {
-      content: ''; width: 5px; height: 5px; border-radius: 50%;
-      background: #444; flex-shrink: 0;
-    }
+    .sprint-items li { font-size: 12px; color: #666; display: flex; align-items: center; gap: 8px; }
+    .sprint-items li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #444; flex-shrink: 0; }
     .sprint-done ~ .sprint-items li::before { background: var(--green); }
     .sprint-wip ~ .sprint-items li.done::before { background: var(--green); }
     .sprint-wip ~ .sprint-items li.wip::before { background: var(--amber); animation: pulse 1.5s infinite; }
 
-    /* ── DOWNLOAD ── */
+    /* DOWNLOAD */
     .download-section { text-align: center; }
-    .download-card {
-      max-width: 560px; margin: 48px auto 0;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; padding: 48px 40px;
-      position: relative; overflow: hidden;
-    }
-    .download-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-    }
+    .download-card { max-width: 560px; margin: 48px auto 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 48px 40px; position: relative; overflow: hidden; }
+    .download-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); }
     .download-icon { font-size: 48px; margin-bottom: 20px; }
     .download-card h3 { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
-    .download-card p  { color: #666; font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
-    .requirements {
-      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-      margin-top: 20px;
-    }
-    .req-chip {
-      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      color: #666; font-size: 11px; padding: 4px 12px; border-radius: 100px;
-    }
+    .download-card p { color: #666; font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
+    .requirements { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .req-chip { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: #666; font-size: 11px; padding: 4px 12px; border-radius: 100px; }
 
-    /* ── BLOG ── */
+    /* BLOG */
     .blog-section { background: var(--bg); }
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-top: 56px;
-    }
-    .blog-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-      display: flex; flex-direction: column;
-    }
-    .blog-card:hover {
-      border-color: #3a3a3a;
-      transform: translateY(-3px);
-    }
-    .blog-card-banner {
-      height: 6px;
-    }
-    .blog-card-banner.new    { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
-    .blog-card-banner.update { background: linear-gradient(90deg, var(--amber), #e8c070); }
-    .blog-card-banner.fix    { background: linear-gradient(90deg, #178bc2, #4ac0f0); }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 56px; }
+    .blog-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+    .blog-card:hover { border-color: #3a3a3a; transform: translateY(-3px); }
+    .blog-card-banner { height: 6px; }
+    .blog-card-banner.new { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
     .blog-card-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
-    .blog-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 10px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; padding: 3px 10px;
-      border-radius: 100px; margin-bottom: 16px; width: fit-content;
-    }
-    .blog-tag.new    { background: rgba(106,184,74,0.12); color: var(--green); border: 1px solid rgba(106,184,74,0.25); }
-    .blog-tag.update { background: rgba(200,144,64,0.12); color: var(--amber); border: 1px solid rgba(200,144,64,0.25); }
-    .blog-tag.fix    { background: rgba(23,139,194,0.12); color: #4ac0f0;   border: 1px solid rgba(23,139,194,0.25); }
-    .blog-card-title {
-      font-size: 1.05rem; font-weight: 700; color: #fff;
-      margin-bottom: 10px; line-height: 1.4;
-    }
-    .blog-card-desc {
-      font-size: 0.875rem; color: #666; line-height: 1.65;
-      flex: 1;
-    }
-    .blog-card-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 20px; padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
+    .blog-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 16px; width: fit-content; }
+    .blog-tag.new { background: rgba(106,184,74,0.12); color: var(--green); border: 1px solid rgba(106,184,74,0.25); }
+    .blog-card-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+    .blog-card-desc { font-size: 0.875rem; color: #666; line-height: 1.65; flex: 1; }
+    .blog-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
     .blog-date { font-size: 11px; color: #444; }
-    .blog-read-more {
-      font-size: 11px; font-weight: 600; color: var(--green);
-      display: flex; align-items: center; gap: 4px;
-      transition: gap 0.2s;
-    }
+    .blog-read-more { font-size: 11px; font-weight: 600; color: var(--green); display: flex; align-items: center; gap: 4px; transition: gap 0.2s; }
     .blog-card:hover .blog-read-more { gap: 8px; }
 
-    /* Blog modal overlay */
-    .blog-modal-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      padding: 40px 20px;
-      overflow-y: auto;
-    }
+    /* BLOG MODAL */
+    .blog-modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); padding: 40px 20px; overflow-y: auto; }
     .blog-modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
-    .blog-modal {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      max-width: 680px; width: 100%;
-      position: relative;
-      animation: fadeUp 0.3s ease both;
-    }
-    .blog-modal-banner {
-      height: 8px; border-radius: 18px 18px 0 0;
-    }
-    .blog-modal-banner.new    { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
-    .blog-modal-banner.update { background: linear-gradient(90deg, var(--amber), #e8c070); }
-    .blog-modal-banner.fix    { background: linear-gradient(90deg, #178bc2, #4ac0f0); }
+    .blog-modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; max-width: 680px; width: 100%; position: relative; animation: fadeUp 0.3s ease both; }
+    .blog-modal-banner { height: 8px; border-radius: 18px 18px 0 0; }
+    .blog-modal-banner.new { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
     .blog-modal-content { padding: 40px; }
-    .blog-modal-close {
-      position: absolute; top: 20px; right: 20px;
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--bg3); border: 1px solid var(--border);
-      color: var(--muted); font-size: 16px; cursor: pointer;
-      display: grid; place-items: center;
-      transition: background 0.15s, color 0.15s;
-    }
+    .blog-modal-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 16px; cursor: pointer; display: grid; place-items: center; transition: background 0.15s, color 0.15s; }
     .blog-modal-close:hover { background: #2a2a2a; color: var(--text); }
-    .blog-modal-meta {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 20px;
-    }
-    .blog-modal-title {
-      font-size: 1.6rem; font-weight: 800; color: #fff;
-      letter-spacing: -0.5px; line-height: 1.25;
-      margin-bottom: 8px;
-    }
+    .blog-modal-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .blog-modal-title { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 8px; }
     .blog-modal-date { font-size: 12px; color: #444; margin-bottom: 28px; }
     .blog-modal-body { font-size: 0.92rem; color: #888; line-height: 1.8; }
     .blog-modal-body p { margin-bottom: 16px; }
@@ -467,13 +171,8 @@
     .blog-modal-body li { margin-bottom: 6px; }
     .blog-modal-body strong { color: #ccc; }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 40px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-logo { display: flex; align-items: center; gap: 10px; }
     .footer-logo img { width: 22px; height: 22px; opacity: 0.7; }
     .footer-logo span { font-size: 13px; font-weight: 600; color: #444; }
@@ -482,21 +181,10 @@
     .footer-links a { font-size: 12px; color: #444; text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--text); }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.4; }
-    }
-
-    /* Scroll reveal */
+    /* ANIMATIONS */
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(24px);  } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse    { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
@@ -512,97 +200,72 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
     <img src="mmslogosimbolodc.png" alt="MMS Logo" />
     <span>Minecraft Mod Studio</span>
   </a>
   <div class="nav-links">
-    <a href="#features">Funcionalidades</a>
+    <a href="#features" data-i18n="nav.features">Funcionalidades</a>
     <a href="#roadmap">Roadmap</a>
     <a href="#blog">Blog</a>
     <a href="#download">Download</a>
   </div>
-  <a class="nav-cta" href="#roadmap">🗺 Roadmap</a>
+  <div class="nav-right">
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-btn" onclick="toggleLang()">
+        <span id="currentFlag">🇧🇷</span>
+        <span id="currentLangLabel">PT</span>
+        <span style="font-size:10px;color:var(--muted)">▾</span>
+      </button>
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-option" onclick="setLang('pt')">🇧🇷 &nbsp;Português</div>
+        <div class="lang-option" onclick="setLang('en')">🇺🇸 &nbsp;English</div>
+        <div class="lang-option" onclick="setLang('es')">🇪🇸 &nbsp;Español</div>
+        <div class="lang-option" onclick="setLang('fr')">🇫🇷 &nbsp;Français</div>
+        <div class="lang-option" onclick="setLang('de')">🇩🇪 &nbsp;Deutsch</div>
+      </div>
+    </div>
+    <a class="nav-cta" href="#roadmap" data-i18n="nav.cta">🗺 Roadmap</a>
+  </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      Em desenvolvimento ativo
-    </div>
-
-    <h1>Crie seu<br/><em>Resource Pack</em><br/>sem escrever código</h1>
-
-    <p>
-      Minecraft Mod Studio é um editor visual para Windows que permite
-      customizar texturas, sons, idiomas e animações do Minecraft de forma
-      intuitiva — sem precisar editar JSON manualmente.
-    </p>
-
+    <div class="hero-badge"><span class="badge-dot"></span><span data-i18n="hero.badge">Em desenvolvimento ativo</span></div>
+    <h1 data-i18n-html="hero.title">Crie seu<br/><em>Resource Pack</em><br/>sem escrever código</h1>
+    <p data-i18n="hero.desc">Minecraft Mod Studio é um editor visual para Windows que permite customizar texturas, sons, idiomas e animações do Minecraft de forma intuitiva — sem precisar editar JSON manualmente.</p>
     <div class="hero-actions">
-      <a class="btn-secondary" href="#blog">
-        📰 Ver novidades
-      </a>
-      <a class="btn-secondary" href="#roadmap">
-        🗺 Ver Roadmap
-      </a>
+      <a class="btn-secondary" href="#blog">📰 <span data-i18n="hero.btn.blog">Ver novidades</span></a>
+      <a class="btn-secondary" href="#roadmap">🗺 <span data-i18n="hero.btn.roadmap">Ver Roadmap</span></a>
     </div>
-
-    <!-- App mockup -->
     <div class="hero-mockup">
       <div class="mockup-window">
         <div class="mockup-titlebar">
-          <span class="dot dot-r"></span>
-          <span class="dot dot-y"></span>
-          <span class="dot dot-g"></span>
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
           <span class="mockup-title">Minecraft Mod Studio — meu_pack · Resource Pack · MC 1.21.4</span>
         </div>
         <div class="mockup-body">
           <div class="mock-sidebar">
-            <div class="mock-sidebar-head">Texturas Editadas</div>
-            <div class="mock-tile active">
-              <div class="mock-thumb edited">🟩</div>
-              <div class="mock-tile-info">
-                <div class="mock-tile-name">grass block top</div>
-                <div class="mock-tile-cat">BLOCK</div>
-              </div>
-              <div class="mock-tile-dot"></div>
-            </div>
-            <div class="mock-tile">
-              <div class="mock-thumb edited">🟫</div>
-              <div class="mock-tile-info">
-                <div class="mock-tile-name">dirt</div>
-                <div class="mock-tile-cat">BLOCK</div>
-              </div>
-              <div class="mock-tile-dot"></div>
-            </div>
-            <div class="mock-tile">
-              <div class="mock-thumb edited">💎</div>
-              <div class="mock-tile-info">
-                <div class="mock-tile-name">diamond</div>
-                <div class="mock-tile-cat">ITEM</div>
-              </div>
-              <div class="mock-tile-dot"></div>
-            </div>
+            <div class="mock-sidebar-head" data-i18n="mock.edited">Texturas Editadas</div>
+            <div class="mock-tile active"><div class="mock-thumb edited">🟩</div><div class="mock-tile-info"><div class="mock-tile-name">grass block top</div><div class="mock-tile-cat">BLOCK</div></div><div class="mock-tile-dot"></div></div>
+            <div class="mock-tile"><div class="mock-thumb edited">🟫</div><div class="mock-tile-info"><div class="mock-tile-name">dirt</div><div class="mock-tile-cat">BLOCK</div></div><div class="mock-tile-dot"></div></div>
+            <div class="mock-tile"><div class="mock-thumb edited">💎</div><div class="mock-tile-info"><div class="mock-tile-name">diamond</div><div class="mock-tile-cat">ITEM</div></div><div class="mock-tile-dot"></div></div>
           </div>
           <div class="mock-editor">
             <div class="mock-tabs">
-              <div class="mock-tab active">✏️ Editor de Pixel</div>
-              <div class="mock-tab">🌐 Idioma / Textos</div>
-              <div class="mock-tab">🖼 Ícone do Pack</div>
+              <div class="mock-tab active">✏️ <span data-i18n="mock.tab1">Editor de Pixel</span></div>
+              <div class="mock-tab">🌐 <span data-i18n="mock.tab2">Idioma / Textos</span></div>
+              <div class="mock-tab">🖼 <span data-i18n="mock.tab3">Ícone do Pack</span></div>
             </div>
-            <div class="mock-canvas-area" id="canvasArea">
+            <div class="mock-canvas-area">
               <div class="mock-pixel-grid" id="pixelGrid"></div>
               <div class="mock-right-panel">
-                <div class="mock-color-label">COR ATUAL</div>
+                <div class="mock-color-label" data-i18n="mock.color">COR ATUAL</div>
                 <div class="mock-color-swatch" id="activeSwatch" style="background:#6ab84a"></div>
-                <div class="mock-color-label">PALETA MC</div>
+                <div class="mock-color-label" data-i18n="mock.palette">PALETA MC</div>
                 <div class="mock-palette" id="palette"></div>
-                <div class="mock-save-btn">💾 Salvar</div>
+                <div class="mock-save-btn">💾 <span data-i18n="mock.save">Salvar</span></div>
               </div>
             </div>
           </div>
@@ -612,240 +275,98 @@
   </div>
 </section>
 
-<!-- FEATURES -->
 <section id="features">
   <div style="max-width:1100px;margin:0 auto">
-    <div class="section-label">Funcionalidades</div>
-    <h2 class="section-title">Tudo que você precisa<br/>num só lugar</h2>
-    <p class="section-sub">Uma interface moderna e intuitiva para criar resource packs profissionais para Minecraft Java Edition.</p>
-
+    <div class="section-label" data-i18n="features.label">Funcionalidades</div>
+    <h2 class="section-title" data-i18n-html="features.title">Tudo que você precisa<br/>num só lugar</h2>
+    <p class="section-sub" data-i18n="features.sub">Uma interface moderna e intuitiva para criar resource packs profissionais para Minecraft Java Edition.</p>
     <div class="features-grid reveal">
-      <div class="feature-card">
-        <div class="feature-icon">🎨</div>
-        <h3>Editor de Pixel Art</h3>
-        <p>Canvas 16×16 e 32×32 com ferramentas de lápis, balde, borracha e conta-gotas. Paleta completa com as cores do Minecraft.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🖼</div>
-        <h3>Editor de Imagem</h3>
-        <p>Para texturas grandes como GUI e mobs (64×256px). Abre como janela independente com zoom suave via scroll.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌍</div>
-        <h3>Editor de Idioma</h3>
-        <p>Renomeie itens, blocos, mobs, encantamentos e biomas. Suporte a pt_BR e en_US com mais de 200 chaves traduzíveis.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📦</div>
-        <h3>Exportação ZIP</h3>
-        <p>Gera um .zip pronto para instalar em .minecraft/resourcepacks com pack.mcmeta, texturas, idioma e ícone do pack.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🗂</div>
-        <h3>Workspace Visual</h3>
-        <p>Todas as texturas editadas aparecem como cards no Workspace para fácil acesso e re-edição sem perder o trabalho.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>100% em Memória</h3>
-        <p>Nenhum arquivo é criado no disco até você exportar. Edite à vontade, tudo é mantido em memória durante a sessão.</p>
-      </div>
+      <div class="feature-card"><div class="feature-icon">🎨</div><h3 data-i18n="feat1.title">Editor de Pixel Art</h3><p data-i18n="feat1.desc">Canvas 16×16 e 32×32 com ferramentas de lápis, balde, borracha e conta-gotas. Paleta completa com as cores do Minecraft.</p></div>
+      <div class="feature-card"><div class="feature-icon">🖼</div><h3 data-i18n="feat2.title">Editor de Imagem</h3><p data-i18n="feat2.desc">Para texturas grandes como GUI e mobs (64×256px). Abre como janela independente com zoom suave via scroll.</p></div>
+      <div class="feature-card"><div class="feature-icon">🌍</div><h3 data-i18n="feat3.title">Editor de Idioma</h3><p data-i18n="feat3.desc">Renomeie itens, blocos, mobs, encantamentos e biomas. Suporte a pt_BR e en_US com mais de 200 chaves traduzíveis.</p></div>
+      <div class="feature-card"><div class="feature-icon">📦</div><h3 data-i18n="feat4.title">Exportação ZIP</h3><p data-i18n="feat4.desc">Gera um .zip pronto para instalar em .minecraft/resourcepacks com pack.mcmeta, texturas, idioma e ícone do pack.</p></div>
+      <div class="feature-card"><div class="feature-icon">🗂</div><h3 data-i18n="feat5.title">Workspace Visual</h3><p data-i18n="feat5.desc">Todas as texturas editadas aparecem como cards no Workspace para fácil acesso e re-edição sem perder o trabalho.</p></div>
+      <div class="feature-card"><div class="feature-icon">⚡</div><h3 data-i18n="feat6.title">100% em Memória</h3><p data-i18n="feat6.desc">Nenhum arquivo é criado no disco até você exportar. Edite à vontade, tudo é mantido em memória durante a sessão.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ROADMAP -->
 <section class="roadmap-section" id="roadmap">
   <div style="max-width:1100px;margin:0 auto">
     <div class="section-label">Roadmap</div>
-    <h2 class="section-title">O que está por vir</h2>
-    <p class="section-sub">O app está em desenvolvimento ativo. Novas funcionalidades são adicionadas regularmente.</p>
-
+    <h2 class="section-title" data-i18n="roadmap.title">O que está por vir</h2>
+    <p class="section-sub" data-i18n="roadmap.sub">O app está em desenvolvimento ativo. Novas funcionalidades são adicionadas regularmente.</p>
     <div class="roadmap-grid reveal">
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-done">✓</div>
-          <div class="sprint-title">Sprint 1 — Interface</div>
-        </div>
-        <ul class="sprint-items">
-          <li class="done">Editor de idioma (pt_BR / en_US)</li>
-          <li class="done">Ícone do resource pack</li>
-          <li class="done">Configurações com reinício</li>
-          <li class="done">Sistema de logs</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-done">✓</div>
-          <div class="sprint-title">Sprint 2 — Texturas</div>
-        </div>
-        <ul class="sprint-items">
-          <li class="done">Mobs, GUI/Interface, Ambiente</li>
-          <li class="done">Pixel Editor (≤32px)</li>
-          <li class="done">Image Editor popup (≥64px)</li>
-          <li class="done">Cards no Workspace</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-wip">3</div>
-          <div class="sprint-title">Sprint 3 — Animações</div>
-        </div>
-        <ul class="sprint-items">
-          <li>Editor de frames com preview</li>
-          <li>Geração de .mcmeta</li>
-          <li>Texturas animadas (lava, água)</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-next">4</div>
-          <div class="sprint-title">Sprint 4 — Sons</div>
-        </div>
-        <ul class="sprint-items">
-          <li>Player de preview de sons</li>
-          <li>Upload de .ogg customizado</li>
-          <li>Geração de sounds.json</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-next">5</div>
-          <div class="sprint-title">Sprint 5 — Modelos 3D</div>
-        </div>
-        <ul class="sprint-items">
-          <li>Integração com Blockbench</li>
-          <li>Editor de modelos de blocos</li>
-          <li>Preview 3D in-app</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-sprint">
-        <div class="sprint-header">
-          <div class="sprint-num sprint-next">+</div>
-          <div class="sprint-title">Futuro — Mods Java</div>
-        </div>
-        <ul class="sprint-items">
-          <li>Itens e blocos customizados</li>
-          <li>NeoForge, Forge e Fabric</li>
-          <li>Build direto pelo app</li>
-        </ul>
-      </div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-done">✓</div><div class="sprint-title" data-i18n="sprint1">Sprint 1 — Interface</div></div><ul class="sprint-items"><li class="done" data-i18n="s1i1">Editor de idioma</li><li class="done" data-i18n="s1i2">Ícone do resource pack</li><li class="done" data-i18n="s1i3">Configurações com reinício</li><li class="done" data-i18n="s1i4">Sistema de logs</li></ul></div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-done">✓</div><div class="sprint-title" data-i18n="sprint2">Sprint 2 — Texturas</div></div><ul class="sprint-items"><li class="done" data-i18n="s2i1">Mobs, GUI, Ambiente</li><li class="done" data-i18n="s2i2">Pixel Editor (≤32px)</li><li class="done" data-i18n="s2i3">Image Editor popup (≥64px)</li><li class="done" data-i18n="s2i4">Cards no Workspace</li></ul></div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-wip">3</div><div class="sprint-title" data-i18n="sprint3">Sprint 3 — Animações</div></div><ul class="sprint-items"><li data-i18n="s3i1">Editor de frames com preview</li><li data-i18n="s3i2">Geração de .mcmeta</li><li data-i18n="s3i3">Texturas animadas (lava, água)</li></ul></div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-next">4</div><div class="sprint-title" data-i18n="sprint4">Sprint 4 — Sons</div></div><ul class="sprint-items"><li data-i18n="s4i1">Player de preview de sons</li><li data-i18n="s4i2">Upload de .ogg customizado</li><li data-i18n="s4i3">Geração de sounds.json</li></ul></div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-next">5</div><div class="sprint-title" data-i18n="sprint5">Sprint 5 — Modelos 3D</div></div><ul class="sprint-items"><li data-i18n="s5i1">Integração com Blockbench</li><li data-i18n="s5i2">Editor de modelos de blocos</li><li data-i18n="s5i3">Preview 3D in-app</li></ul></div>
+      <div class="roadmap-sprint"><div class="sprint-header"><div class="sprint-num sprint-next">+</div><div class="sprint-title" data-i18n="sprint6">Futuro — Mods Java</div></div><ul class="sprint-items"><li data-i18n="s6i1">Itens e blocos customizados</li><li data-i18n="s6i2">NeoForge, Forge e Fabric</li><li data-i18n="s6i3">Build direto pelo app</li></ul></div>
     </div>
   </div>
 </section>
 
-<!-- BLOG -->
 <section class="blog-section" id="blog">
   <div style="max-width:1100px;margin:0 auto">
     <div class="section-label">Blog</div>
-    <h2 class="section-title">Novidades & Atualizações</h2>
-    <p class="section-sub">Acompanhe o progresso do desenvolvimento, novas funcionalidades e anúncios importantes.</p>
-
+    <h2 class="section-title" data-i18n="blog.title">Novidades & Atualizações</h2>
+    <p class="section-sub" data-i18n="blog.sub">Acompanhe o progresso do desenvolvimento, novas funcionalidades e anúncios importantes.</p>
     <div class="blog-grid reveal" id="blogGrid">
-
-      <!-- Post 1 -->
-      <div class="blog-card" onclick="openPost('post1')">
+      <div class="blog-card" onclick="openPost('post1')" style="max-width:480px">
         <div class="blog-card-banner new"></div>
         <div class="blog-card-body">
-          <span class="blog-tag new">🌱 Nova versão</span>
-          <div class="blog-card-title">Sprint 2 concluída — Editor de Texturas completo!</div>
-          <div class="blog-card-desc">
-            Finalizamos o editor de pixel art, suporte a texturas de mobs, blocos e GUI, além do Workspace com cards visuais para todas as texturas editadas.
-          </div>
+          <span class="blog-tag new" id="post1Tag">📖 Guia</span>
+          <div class="blog-card-title" id="post1CardTitle">Como o Minecraft Mod Studio funciona</div>
+          <div class="blog-card-desc" id="post1CardDesc">Entenda como o app funciona por dentro: do editor de pixel art até a exportação do seu resource pack pronto para jogar.</div>
           <div class="blog-card-footer">
-            <span class="blog-date">15 Mar 2025</span>
-            <span class="blog-read-more">Ler mais →</span>
+            <span class="blog-date" id="post1Date">23 Mar 2025</span>
+            <span class="blog-read-more" data-i18n="blog.readmore">Ler mais →</span>
           </div>
         </div>
       </div>
-
-      <!-- Post 2 -->
-      <div class="blog-card" onclick="openPost('post2')">
-        <div class="blog-card-banner update"></div>
-        <div class="blog-card-body">
-          <span class="blog-tag update">⚡ Atualização</span>
-          <div class="blog-card-title">Sprint 3 em andamento — Animações chegando</div>
-          <div class="blog-card-desc">
-            Estamos trabalhando no editor de frames animados com preview em tempo real e geração automática de arquivos .mcmeta para texturas como lava e água.
-          </div>
-          <div class="blog-card-footer">
-            <span class="blog-date">22 Mar 2025</span>
-            <span class="blog-read-more">Ler mais →</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Post 3 -->
-      <div class="blog-card" onclick="openPost('post3')">
-        <div class="blog-card-banner fix"></div>
-        <div class="blog-card-body">
-          <span class="blog-tag fix">🔧 Correção</span>
-          <div class="blog-card-title">Hotfix v0.2.1 — Estabilidade do Pixel Editor</div>
-          <div class="blog-card-desc">
-            Corrigimos um bug onde o conta-gotas não capturava cores corretamente em pixels transparentes. Também melhoramos a performance ao redimensionar a janela.
-          </div>
-          <div class="blog-card-footer">
-            <span class="blog-date">10 Mar 2025</span>
-            <span class="blog-read-more">Ler mais →</span>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- DOWNLOAD -->
 <section id="download" class="download-section">
   <div style="max-width:1100px;margin:0 auto">
     <div class="section-label">Download</div>
-    <h2 class="section-title">Comece a criar hoje</h2>
-    <p class="section-sub" style="margin:0 auto">Grátis. Disponível para Windows.</p>
-
+    <h2 class="section-title" data-i18n="download.title">Comece a criar hoje</h2>
+    <p class="section-sub" style="margin:0 auto" data-i18n="download.sub">Grátis. Disponível para Windows.</p>
     <div class="download-card reveal">
       <div class="download-icon">🪟</div>
-      <h3>Minecraft Mod Studio para Windows</h3>
-      <p>
-        O app está em desenvolvimento ativo e em breve estará disponível para download.
-        Acompanhe o <a href="#blog" style="color:var(--green);text-decoration:none;">blog</a> e o
-        <a href="#roadmap" style="color:var(--green);text-decoration:none;">roadmap</a> para saber quando o download será liberado.
-      </p>
+      <h3 data-i18n="download.card.title">Minecraft Mod Studio para Windows</h3>
+      <p data-i18n="download.card.desc">O app está em desenvolvimento ativo e em breve estará disponível para download. Acompanhe o blog e o roadmap para saber quando o download será liberado.</p>
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(106,184,74,0.08);border:1px solid rgba(106,184,74,0.2);color:var(--green);font-size:13px;font-weight:700;padding:10px 22px;border-radius:8px;">
-        <span class="badge-dot" style="width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span>
-        Em desenvolvimento — em breve
+        <span style="width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span>
+        <span data-i18n="download.soon">Em desenvolvimento — em breve</span>
       </div>
       <div class="requirements">
         <span class="req-chip">Windows 10/11</span>
         <span class="req-chip">Python 3.11+</span>
-        <span class="req-chip">Grátis</span>
+        <span class="req-chip" data-i18n="download.free">Grátis</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">
     <img src="mmslogosimbolodc.png" alt="Logo" />
     <span>Minecraft Mod Studio</span>
   </div>
-  <p>Feito com ❤ por MineLitz · Não afiliado à Mojang/Microsoft</p>
+  <p data-i18n="footer.copy">Não afiliado à Mojang/Microsoft</p>
   <div class="footer-links">
     <a href="#blog">Blog</a>
     <a href="#roadmap">Roadmap</a>
-    <a href="#features">Funcionalidades</a>
+    <a href="#features" data-i18n="nav.features">Funcionalidades</a>
   </div>
 </footer>
 
-<!-- BLOG MODAL -->
 <div class="blog-modal-overlay" id="blogModalOverlay" onclick="closePostOnOverlay(event)">
-  <div class="blog-modal" id="blogModal">
-    <div class="blog-modal-banner" id="modalBanner"></div>
+  <div class="blog-modal">
+    <div class="blog-modal-banner new"></div>
     <div class="blog-modal-content">
       <button class="blog-modal-close" onclick="closePost()">✕</button>
       <div class="blog-modal-meta" id="modalMeta"></div>
@@ -857,149 +378,248 @@
 </div>
 
 <script>
-  // ── Blog posts data ────────────────────────────────────────────────────────
-  const posts = {
-    post1: {
-      tag: 'new', tagLabel: '🌱 Nova versão',
-      title: 'Sprint 2 concluída — Editor de Texturas completo!',
-      date: '15 de Março de 2025',
-      body: `
-        <p>É com muito orgulho que anunciamos a conclusão da <strong>Sprint 2</strong> do Minecraft Mod Studio! Esta foi a sprint mais trabalhosa até agora e trouxe a funcionalidade principal do app: o editor de texturas.</p>
-        <p><strong>O que foi adicionado:</strong></p>
-        <ul>
-          <li>Editor de Pixel Art para texturas 16×16 e 32×32 com lápis, balde, borracha e conta-gotas</li>
-          <li>Suporte a categorias: Mobs, GUI/Interface e Ambiente</li>
-          <li>Image Editor popup para texturas grandes (≥64px) com zoom via scroll</li>
-          <li>Workspace visual com cards para todas as texturas editadas na sessão</li>
-          <li>Paleta completa com as 16 cores base do Minecraft</li>
-        </ul>
-        <p>A próxima sprint foca em <strong>animações</strong>: editor de frames, geração de .mcmeta e preview de texturas animadas em tempo real. Fique ligado!</p>
-      `
-    },
-    post2: {
-      tag: 'update', tagLabel: '⚡ Atualização',
-      title: 'Sprint 3 em andamento — Animações chegando',
-      date: '22 de Março de 2025',
-      body: `
-        <p>O desenvolvimento está a todo vapor! A <strong>Sprint 3</strong> já está em andamento e o foco é trazer suporte completo a texturas animadas no Minecraft.</p>
-        <p><strong>O que está sendo desenvolvido:</strong></p>
-        <ul>
-          <li><strong>Editor de frames</strong> com timeline visual e preview ao vivo</li>
-          <li><strong>Geração automática de .mcmeta</strong> com controle de frametime por frame</li>
-          <li>Suporte inicial a texturas animadas como lava, água e portais</li>
-        </ul>
-        <p>Prevemos a conclusão da Sprint 3 até o final de Abril. Após isso, a Sprint 4 trará o suporte a sons customizados com upload de arquivos .ogg e geração do sounds.json.</p>
-        <p>Acompanhe as atualizações aqui no blog!</p>
-      `
-    },
-    post3: {
-      tag: 'fix', tagLabel: '🔧 Correção',
-      title: 'Hotfix v0.2.1 — Estabilidade do Pixel Editor',
-      date: '10 de Março de 2025',
-      body: `
-        <p>Lançamos um hotfix para resolver dois problemas reportados pelos usuários após o lançamento da v0.2.</p>
-        <p><strong>Bugs corrigidos:</strong></p>
-        <ul>
-          <li><strong>Conta-gotas em pixels transparentes:</strong> A ferramenta não capturava corretamente a cor de pixels com canal alpha menor que 255. Agora retorna a cor RGB real ignorando a transparência.</li>
-          <li><strong>Performance no redimensionamento:</strong> Ao redimensionar a janela do app, o canvas de pixel art recalculava desnecessariamente. Isso foi otimizado para evitar travamentos em telas menores.</li>
-        </ul>
-        <p>Agradecemos a todos que reportaram os problemas. Continuem enviando feedback para nos ajudar a melhorar o app!</p>
-      `
+const i18n = {
+  pt: {
+    'nav.features':'Funcionalidades','nav.cta':'🗺 Roadmap',
+    'hero.badge':'Em desenvolvimento ativo',
+    'hero.title':'Crie seu<br/><em>Resource Pack</em><br/>sem escrever código',
+    'hero.desc':'Minecraft Mod Studio é um editor visual para Windows que permite customizar texturas, sons, idiomas e animações do Minecraft de forma intuitiva — sem precisar editar JSON manualmente.',
+    'hero.btn.blog':'Ver novidades','hero.btn.roadmap':'Ver Roadmap',
+    'mock.edited':'Texturas Editadas','mock.tab1':'Editor de Pixel','mock.tab2':'Idioma / Textos','mock.tab3':'Ícone do Pack',
+    'mock.color':'COR ATUAL','mock.palette':'PALETA MC','mock.save':'Salvar',
+    'features.label':'Funcionalidades','features.title':'Tudo que você precisa<br/>num só lugar',
+    'features.sub':'Uma interface moderna e intuitiva para criar resource packs profissionais para Minecraft Java Edition.',
+    'feat1.title':'Editor de Pixel Art','feat1.desc':'Canvas 16×16 e 32×32 com ferramentas de lápis, balde, borracha e conta-gotas. Paleta completa com as cores do Minecraft.',
+    'feat2.title':'Editor de Imagem','feat2.desc':'Para texturas grandes como GUI e mobs (64×256px). Abre como janela independente com zoom suave via scroll.',
+    'feat3.title':'Editor de Idioma','feat3.desc':'Renomeie itens, blocos, mobs, encantamentos e biomas. Suporte a pt_BR e en_US com mais de 200 chaves traduzíveis.',
+    'feat4.title':'Exportação ZIP','feat4.desc':'Gera um .zip pronto para instalar em .minecraft/resourcepacks com pack.mcmeta, texturas, idioma e ícone do pack.',
+    'feat5.title':'Workspace Visual','feat5.desc':'Todas as texturas editadas aparecem como cards no Workspace para fácil acesso e re-edição sem perder o trabalho.',
+    'feat6.title':'100% em Memória','feat6.desc':'Nenhum arquivo é criado no disco até você exportar. Edite à vontade, tudo é mantido em memória durante a sessão.',
+    'roadmap.title':'O que está por vir','roadmap.sub':'O app está em desenvolvimento ativo. Novas funcionalidades são adicionadas regularmente.',
+    'sprint1':'Sprint 1 — Interface','sprint2':'Sprint 2 — Texturas','sprint3':'Sprint 3 — Animações','sprint4':'Sprint 4 — Sons','sprint5':'Sprint 5 — Modelos 3D','sprint6':'Futuro — Mods Java',
+    's1i1':'Editor de idioma (pt_BR / en_US)','s1i2':'Ícone do resource pack','s1i3':'Configurações com reinício','s1i4':'Sistema de logs',
+    's2i1':'Mobs, GUI/Interface, Ambiente','s2i2':'Pixel Editor (≤32px)','s2i3':'Image Editor popup (≥64px)','s2i4':'Cards no Workspace',
+    's3i1':'Editor de frames com preview','s3i2':'Geração de .mcmeta','s3i3':'Texturas animadas (lava, água)',
+    's4i1':'Player de preview de sons','s4i2':'Upload de .ogg customizado','s4i3':'Geração de sounds.json',
+    's5i1':'Integração com Blockbench','s5i2':'Editor de modelos de blocos','s5i3':'Preview 3D in-app',
+    's6i1':'Itens e blocos customizados','s6i2':'NeoForge, Forge e Fabric','s6i3':'Build direto pelo app',
+    'blog.title':'Novidades & Atualizações','blog.sub':'Acompanhe o progresso do desenvolvimento, novas funcionalidades e anúncios importantes.',
+    'blog.readmore':'Ler mais →',
+    'download.title':'Comece a criar hoje','download.sub':'Grátis. Disponível para Windows.',
+    'download.card.title':'Minecraft Mod Studio para Windows',
+    'download.card.desc':'O app está em desenvolvimento ativo e em breve estará disponível para download. Acompanhe o blog e o roadmap para saber quando o download será liberado.',
+    'download.soon':'Em desenvolvimento — em breve','download.free':'Grátis',
+    'footer.copy':'Não afiliado à Mojang/Microsoft',
+  },
+  en: {
+    'nav.features':'Features','nav.cta':'🗺 Roadmap',
+    'hero.badge':'Actively in development',
+    'hero.title':'Build your<br/><em>Resource Pack</em><br/>without writing code',
+    'hero.desc':'Minecraft Mod Studio is a visual editor for Windows that lets you customize textures, sounds, languages and animations intuitively — no manual JSON editing required.',
+    'hero.btn.blog':'See updates','hero.btn.roadmap':'See Roadmap',
+    'mock.edited':'Edited Textures','mock.tab1':'Pixel Editor','mock.tab2':'Language / Texts','mock.tab3':'Pack Icon',
+    'mock.color':'CURRENT COLOR','mock.palette':'MC PALETTE','mock.save':'Save',
+    'features.label':'Features','features.title':'Everything you need<br/>in one place',
+    'features.sub':'A modern, intuitive interface for creating professional resource packs for Minecraft Java Edition.',
+    'feat1.title':'Pixel Art Editor','feat1.desc':'16×16 and 32×32 canvas with pencil, fill, eraser and eyedropper. Full Minecraft color palette included.',
+    'feat2.title':'Image Editor','feat2.desc':'For large textures like GUI and mobs (64×256px). Opens as an independent window with smooth scroll zoom.',
+    'feat3.title':'Language Editor','feat3.desc':'Rename items, blocks, mobs, enchantments and biomes. Supports pt_BR and en_US with 200+ translatable keys.',
+    'feat4.title':'ZIP Export','feat4.desc':'Generates a ready-to-install .zip for .minecraft/resourcepacks with pack.mcmeta, textures, language and pack icon.',
+    'feat5.title':'Visual Workspace','feat5.desc':'All edited textures appear as cards in the Workspace for easy access and re-editing without losing your work.',
+    'feat6.title':'100% In-Memory','feat6.desc':'No files are created on disk until you export. Edit freely — everything is kept in memory during the session.',
+    'roadmap.title':"What's coming next",'roadmap.sub':'The app is in active development. New features are added regularly.',
+    'sprint1':'Sprint 1 — Interface','sprint2':'Sprint 2 — Textures','sprint3':'Sprint 3 — Animations','sprint4':'Sprint 4 — Sounds','sprint5':'Sprint 5 — 3D Models','sprint6':'Future — Java Mods',
+    's1i1':'Language editor (pt_BR / en_US)','s1i2':'Resource pack icon','s1i3':'Settings with restart','s1i4':'Log system',
+    's2i1':'Mobs, GUI/Interface, Environment','s2i2':'Pixel Editor (≤32px)','s2i3':'Image Editor popup (≥64px)','s2i4':'Workspace cards',
+    's3i1':'Frame editor with preview','s3i2':'.mcmeta generation','s3i3':'Animated textures (lava, water)',
+    's4i1':'Sound preview player','s4i2':'Custom .ogg upload','s4i3':'sounds.json generation',
+    's5i1':'Blockbench integration','s5i2':'Block model editor','s5i3':'In-app 3D preview',
+    's6i1':'Custom items and blocks','s6i2':'NeoForge, Forge and Fabric','s6i3':'Build directly from the app',
+    'blog.title':'Updates & News','blog.sub':'Follow the development progress, new features and important announcements.',
+    'blog.readmore':'Read more →',
+    'download.title':'Start creating today','download.sub':'Free. Available for Windows.',
+    'download.card.title':'Minecraft Mod Studio for Windows',
+    'download.card.desc':'The app is in active development and will be available for download soon. Follow the blog and roadmap to know when the download will be released.',
+    'download.soon':'In development — coming soon','download.free':'Free',
+    'footer.copy':'Not affiliated with Mojang/Microsoft',
+  },
+  es: {
+    'nav.features':'Funcionalidades','nav.cta':'🗺 Roadmap',
+    'hero.badge':'En desarrollo activo',
+    'hero.title':'Crea tu<br/><em>Resource Pack</em><br/>sin escribir código',
+    'hero.desc':'Minecraft Mod Studio es un editor visual para Windows que te permite personalizar texturas, sonidos, idiomas y animaciones de Minecraft de forma intuitiva — sin editar JSON manualmente.',
+    'hero.btn.blog':'Ver novedades','hero.btn.roadmap':'Ver Roadmap',
+    'mock.edited':'Texturas Editadas','mock.tab1':'Editor de Píxeles','mock.tab2':'Idioma / Textos','mock.tab3':'Icono del Pack',
+    'mock.color':'COLOR ACTUAL','mock.palette':'PALETA MC','mock.save':'Guardar',
+    'features.label':'Funcionalidades','features.title':'Todo lo que necesitas<br/>en un solo lugar',
+    'features.sub':'Una interfaz moderna e intuitiva para crear resource packs profesionales para Minecraft Java Edition.',
+    'feat1.title':'Editor de Pixel Art','feat1.desc':'Canvas 16×16 y 32×32 con lápiz, relleno, borrador y cuentagotas. Paleta completa de Minecraft.',
+    'feat2.title':'Editor de Imagen','feat2.desc':'Para texturas grandes como GUI y mobs (64×256px). Abre como ventana independiente con zoom suave.',
+    'feat3.title':'Editor de Idioma','feat3.desc':'Renombra ítems, bloques, mobs, encantamientos y biomas. Soporte pt_BR y en_US con más de 200 claves.',
+    'feat4.title':'Exportación ZIP','feat4.desc':'Genera un .zip listo para instalar en .minecraft/resourcepacks con pack.mcmeta, texturas, idioma e icono.',
+    'feat5.title':'Workspace Visual','feat5.desc':'Todas las texturas editadas aparecen como tarjetas en el Workspace para fácil reedición.',
+    'feat6.title':'100% en Memoria','feat6.desc':'No se crea ningún archivo en disco hasta que exportas. Edita libremente — todo se mantiene en memoria.',
+    'roadmap.title':'Lo que viene','roadmap.sub':'La app está en desarrollo activo. Se agregan nuevas funcionalidades regularmente.',
+    'sprint1':'Sprint 1 — Interfaz','sprint2':'Sprint 2 — Texturas','sprint3':'Sprint 3 — Animaciones','sprint4':'Sprint 4 — Sonidos','sprint5':'Sprint 5 — Modelos 3D','sprint6':'Futuro — Mods Java',
+    's1i1':'Editor de idioma (pt_BR / en_US)','s1i2':'Icono del resource pack','s1i3':'Ajustes con reinicio','s1i4':'Sistema de registros',
+    's2i1':'Mobs, GUI/Interfaz, Ambiente','s2i2':'Pixel Editor (≤32px)','s2i3':'Image Editor popup (≥64px)','s2i4':'Tarjetas en Workspace',
+    's3i1':'Editor de frames con vista previa','s3i2':'Generación de .mcmeta','s3i3':'Texturas animadas (lava, agua)',
+    's4i1':'Reproductor de sonidos','s4i2':'Subida de .ogg personalizado','s4i3':'Generación de sounds.json',
+    's5i1':'Integración con Blockbench','s5i2':'Editor de modelos de bloques','s5i3':'Vista previa 3D en app',
+    's6i1':'Ítems y bloques personalizados','s6i2':'NeoForge, Forge y Fabric','s6i3':'Build directo desde la app',
+    'blog.title':'Novedades & Actualizaciones','blog.sub':'Sigue el progreso del desarrollo, nuevas funcionalidades y anuncios importantes.',
+    'blog.readmore':'Leer más →',
+    'download.title':'Empieza a crear hoy','download.sub':'Gratis. Disponible para Windows.',
+    'download.card.title':'Minecraft Mod Studio para Windows',
+    'download.card.desc':'La app está en desarrollo activo y pronto estará disponible para descargar. Sigue el blog y el roadmap para saber cuándo.',
+    'download.soon':'En desarrollo — próximamente','download.free':'Gratis',
+    'footer.copy':'No afiliado a Mojang/Microsoft',
+  },
+  fr: {
+    'nav.features':'Fonctionnalités','nav.cta':'🗺 Roadmap',
+    'hero.badge':'En développement actif',
+    'hero.title':'Créez votre<br/><em>Resource Pack</em><br/>sans écrire de code',
+    'hero.desc':"Minecraft Mod Studio est un éditeur visuel pour Windows qui vous permet de personnaliser textures, sons, langues et animations de Minecraft de façon intuitive — sans éditer de JSON manuellement.",
+    'hero.btn.blog':'Voir les nouveautés','hero.btn.roadmap':'Voir le Roadmap',
+    'mock.edited':'Textures Éditées','mock.tab1':'Éditeur de Pixel','mock.tab2':'Langue / Textes','mock.tab3':'Icône du Pack',
+    'mock.color':'COULEUR ACTUELLE','mock.palette':'PALETTE MC','mock.save':'Sauvegarder',
+    'features.label':'Fonctionnalités','features.title':'Tout ce dont vous avez besoin<br/>en un seul endroit',
+    'features.sub':'Une interface moderne et intuitive pour créer des resource packs professionnels pour Minecraft Java Edition.',
+    'feat1.title':'Éditeur Pixel Art','feat1.desc':'Canvas 16×16 et 32×32 avec crayon, remplissage, gomme et pipette. Palette complète Minecraft.',
+    'feat2.title':"Éditeur d'Image",'feat2.desc':'Pour les grandes textures comme GUI et mobs (64×256px). Ouvre en fenêtre indépendante avec zoom fluide.',
+    'feat3.title':'Éditeur de Langue','feat3.desc':'Renommez items, blocs, mobs, enchantements et biomes. Support pt_BR et en_US avec plus de 200 clés.',
+    'feat4.title':'Export ZIP','feat4.desc':'Génère un .zip prêt à installer dans .minecraft/resourcepacks avec pack.mcmeta, textures, langue et icône.',
+    'feat5.title':'Workspace Visuel','feat5.desc':'Toutes les textures éditées apparaissent comme des cartes dans le Workspace pour un accès facile.',
+    'feat6.title':'100% en Mémoire','feat6.desc':"Aucun fichier n'est créé sur le disque jusqu'à l'export. Éditez librement — tout est gardé en mémoire.",
+    'roadmap.title':'Ce qui arrive','roadmap.sub':"L'app est en développement actif. De nouvelles fonctionnalités sont ajoutées régulièrement.",
+    'sprint1':'Sprint 1 — Interface','sprint2':'Sprint 2 — Textures','sprint3':'Sprint 3 — Animations','sprint4':'Sprint 4 — Sons','sprint5':'Sprint 5 — Modèles 3D','sprint6':'Futur — Mods Java',
+    's1i1':'Éditeur de langue (pt_BR / en_US)','s1i2':'Icône du resource pack','s1i3':'Paramètres avec redémarrage','s1i4':'Système de logs',
+    's2i1':'Mobs, GUI/Interface, Environnement','s2i2':'Pixel Editor (≤32px)','s2i3':'Image Editor popup (≥64px)','s2i4':'Cartes dans Workspace',
+    's3i1':'Éditeur de frames avec aperçu','s3i2':'Génération de .mcmeta','s3i3':'Textures animées (lave, eau)',
+    's4i1':"Lecteur d'aperçu de sons",'s4i2':'Import .ogg personnalisé','s4i3':'Génération de sounds.json',
+    's5i1':'Intégration Blockbench','s5i2':'Éditeur de modèles de blocs','s5i3':'Aperçu 3D in-app',
+    's6i1':'Items et blocs personnalisés','s6i2':'NeoForge, Forge et Fabric','s6i3':"Build directement depuis l'app",
+    'blog.title':'Actualités & Mises à jour','blog.sub':'Suivez les progrès du développement, les nouvelles fonctionnalités et les annonces importantes.',
+    'blog.readmore':'Lire la suite →',
+    'download.title':"Commencez à créer aujourd'hui",'download.sub':'Gratuit. Disponible pour Windows.',
+    'download.card.title':'Minecraft Mod Studio pour Windows',
+    'download.card.desc':"L'app est en développement actif et sera bientôt disponible au téléchargement. Suivez le blog et le roadmap pour savoir quand.",
+    'download.soon':'En développement — bientôt disponible','download.free':'Gratuit',
+    'footer.copy':'Non affilié à Mojang/Microsoft',
+  },
+  de: {
+    'nav.features':'Funktionen','nav.cta':'🗺 Roadmap',
+    'hero.badge':'Aktiv in Entwicklung',
+    'hero.title':'Erstelle dein<br/><em>Resource Pack</em><br/>ohne Code zu schreiben',
+    'hero.desc':'Minecraft Mod Studio ist ein visueller Editor für Windows, mit dem du Texturen, Sounds, Sprachen und Animationen von Minecraft intuitiv anpassen kannst — ohne manuelles JSON-Editing.',
+    'hero.btn.blog':'Neuigkeiten sehen','hero.btn.roadmap':'Roadmap sehen',
+    'mock.edited':'Bearbeitete Texturen','mock.tab1':'Pixel-Editor','mock.tab2':'Sprache / Texte','mock.tab3':'Pack-Symbol',
+    'mock.color':'AKTUELLE FARBE','mock.palette':'MC PALETTE','mock.save':'Speichern',
+    'features.label':'Funktionen','features.title':'Alles was du brauchst<br/>an einem Ort',
+    'features.sub':'Eine moderne, intuitive Oberfläche zum Erstellen professioneller Resource Packs für Minecraft Java Edition.',
+    'feat1.title':'Pixel Art Editor','feat1.desc':'16×16 und 32×32 Canvas mit Stift, Fülleimer, Radierer und Pipette. Vollständige Minecraft-Farbpalette.',
+    'feat2.title':'Bild-Editor','feat2.desc':'Für große Texturen wie GUI und Mobs (64×256px). Öffnet als unabhängiges Fenster mit sanftem Zoom.',
+    'feat3.title':'Sprach-Editor','feat3.desc':'Benenne Items, Blöcke, Mobs, Verzauberungen und Biome um. Unterstützt pt_BR und en_US mit über 200 Schlüsseln.',
+    'feat4.title':'ZIP-Export','feat4.desc':'Erzeugt eine installationsfertige .zip für .minecraft/resourcepacks mit pack.mcmeta, Texturen, Sprache und Symbol.',
+    'feat5.title':'Visueller Workspace','feat5.desc':'Alle bearbeiteten Texturen erscheinen als Karten im Workspace für einfachen Zugriff.',
+    'feat6.title':'100% Im Speicher','feat6.desc':'Es werden keine Dateien auf der Festplatte erstellt, bis du exportierst. Bearbeite frei — alles bleibt im Speicher.',
+    'roadmap.title':'Was kommt als nächstes','roadmap.sub':'Die App ist in aktiver Entwicklung. Neue Funktionen werden regelmäßig hinzugefügt.',
+    'sprint1':'Sprint 1 — Interface','sprint2':'Sprint 2 — Texturen','sprint3':'Sprint 3 — Animationen','sprint4':'Sprint 4 — Sounds','sprint5':'Sprint 5 — 3D-Modelle','sprint6':'Zukunft — Java Mods',
+    's1i1':'Spracheditor (pt_BR / en_US)','s1i2':'Resource Pack Symbol','s1i3':'Einstellungen mit Neustart','s1i4':'Log-System',
+    's2i1':'Mobs, GUI/Interface, Umgebung','s2i2':'Pixel Editor (≤32px)','s2i3':'Image Editor Popup (≥64px)','s2i4':'Workspace-Karten',
+    's3i1':'Frame-Editor mit Vorschau','s3i2':'.mcmeta-Generierung','s3i3':'Animierte Texturen (Lava, Wasser)',
+    's4i1':'Sound-Vorschau-Player','s4i2':'Benutzerdefinierter .ogg-Upload','s4i3':'sounds.json-Generierung',
+    's5i1':'Blockbench-Integration','s5i2':'Block-Modell-Editor','s5i3':'In-App 3D-Vorschau',
+    's6i1':'Benutzerdefinierte Items und Blöcke','s6i2':'NeoForge, Forge und Fabric','s6i3':'Build direkt aus der App',
+    'blog.title':'Neuigkeiten & Updates','blog.sub':'Verfolge den Entwicklungsfortschritt, neue Funktionen und wichtige Ankündigungen.',
+    'blog.readmore':'Mehr lesen →',
+    'download.title':'Fang heute an zu erstellen','download.sub':'Kostenlos. Verfügbar für Windows.',
+    'download.card.title':'Minecraft Mod Studio für Windows',
+    'download.card.desc':'Die App ist in aktiver Entwicklung und wird bald zum Download verfügbar sein. Folge dem Blog und der Roadmap.',
+    'download.soon':'In Entwicklung — bald verfügbar','download.free':'Kostenlos',
+    'footer.copy':'Nicht mit Mojang/Microsoft verbunden',
+  }
+};
+
+const langMeta = {
+  pt:{flag:'🇧🇷',label:'PT',html:'pt-BR'},
+  en:{flag:'🇺🇸',label:'EN',html:'en'},
+  es:{flag:'🇪🇸',label:'ES',html:'es'},
+  fr:{flag:'🇫🇷',label:'FR',html:'fr'},
+  de:{flag:'🇩🇪',label:'DE',html:'de'},
+};
+
+const postData = {
+  post1: {
+    tagLabel:{ pt:'📖 Guia', en:'📖 Guide', es:'📖 Guía', fr:'📖 Guide', de:'📖 Guide' },
+    cardTitle:{ pt:'Como o Minecraft Mod Studio funciona', en:'How Minecraft Mod Studio works', es:'Cómo funciona Minecraft Mod Studio', fr:'Comment fonctionne Minecraft Mod Studio', de:'Wie Minecraft Mod Studio funktioniert' },
+    cardDesc:{ pt:'Entenda como o app funciona por dentro: do editor de pixel art até a exportação do seu resource pack pronto para jogar.', en:'Understand how the app works internally: from the pixel art editor to exporting your resource pack ready to play.', es:'Entiende cómo funciona la app por dentro: desde el editor de pixel art hasta la exportación de tu resource pack.', fr:"Comprenez comment l'app fonctionne en interne : de l'éditeur pixel art jusqu'à l'export de votre resource pack.", de:'Verstehe wie die App intern funktioniert: vom Pixel Art Editor bis zum Export deines Resource Packs.' },
+    date:{ pt:'23 de Março de 2025', en:'March 23, 2025', es:'23 de Marzo de 2025', fr:'23 Mars 2025', de:'23. März 2025' },
+    body:{
+      pt:`<p>O <strong>Minecraft Mod Studio</strong> foi criado para tornar a criação de Resource Packs acessível a qualquer pessoa, mesmo sem experiência com programação ou edição de arquivos JSON.</p><p><strong>Como funciona na prática:</strong></p><ul><li><strong>Abra o app</strong> e crie um novo projeto de Resource Pack informando o nome, a versão do Minecraft e o ícone.</li><li><strong>Escolha o que editar</strong> — navegue pelas categorias: Blocos, Itens, Mobs, GUI e Ambiente.</li><li><strong>Use o Editor de Pixel Art</strong> para texturas 16×16 ou 32×32px com ferramentas de lápis, balde, borracha e conta-gotas.</li><li><strong>Para texturas grandes</strong> (GUI, mobs), o Image Editor abre em janela separada com zoom via scroll.</li><li><strong>Edite os textos do jogo</strong> com o Editor de Idioma — renomeie itens, blocos e mobs em pt_BR ou en_US.</li><li><strong>Acompanhe tudo no Workspace</strong> — cada textura editada aparece como card para fácil re-edição.</li><li><strong>Exporte com um clique</strong> — gera um .zip pronto para arrastar para .minecraft/resourcepacks.</li></ul><p>Tudo é mantido em memória durante a sessão. Nenhum arquivo temporário é criado até você exportar. Simples, rápido e sem complicação.</p>`,
+      en:`<p><strong>Minecraft Mod Studio</strong> was created to make Resource Pack creation accessible to anyone, even without programming experience.</p><p><strong>How it works in practice:</strong></p><ul><li><strong>Open the app</strong> and create a new Resource Pack project with a name, Minecraft version and icon.</li><li><strong>Choose what to edit</strong> — browse categories: Blocks, Items, Mobs, GUI and Environment.</li><li><strong>Use the Pixel Art Editor</strong> for 16×16 or 32×32px textures with pencil, fill, eraser and eyedropper tools.</li><li><strong>For large textures</strong> (GUI, mobs), the Image Editor opens in a separate window with scroll zoom.</li><li><strong>Edit in-game texts</strong> with the Language Editor — rename items, blocks and mobs in pt_BR or en_US.</li><li><strong>Track everything in the Workspace</strong> — each edited texture appears as a card for easy re-editing.</li><li><strong>Export with one click</strong> — generates a .zip ready to drag into .minecraft/resourcepacks.</li></ul><p>Everything is kept in memory during the session. No temporary files are created until you export. Simple, fast and hassle-free.</p>`,
+      es:`<p><strong>Minecraft Mod Studio</strong> fue creado para hacer que la creación de Resource Packs sea accesible para cualquier persona.</p><p><strong>Cómo funciona en la práctica:</strong></p><ul><li><strong>Abre la app</strong> y crea un nuevo proyecto con nombre, versión de Minecraft e icono.</li><li><strong>Elige qué editar</strong> — navega por categorías: Bloques, Ítems, Mobs, GUI y Ambiente.</li><li><strong>Usa el Editor de Pixel Art</strong> para texturas 16×16 o 32×32px con lápiz, relleno, borrador y cuentagotas.</li><li><strong>Para texturas grandes</strong> (GUI, mobs), el Image Editor abre en ventana separada con zoom.</li><li><strong>Edita los textos del juego</strong> — renombra ítems, bloques y mobs en pt_BR o en_US.</li><li><strong>Sigue todo en el Workspace</strong> — cada textura editada aparece como tarjeta para fácil reedición.</li><li><strong>Exporta con un clic</strong> — genera un .zip listo para instalar en .minecraft/resourcepacks.</li></ul><p>Todo se mantiene en memoria. Sin archivos temporales hasta que exportes. Simple, rápido y sin complicaciones.</p>`,
+      fr:`<p><strong>Minecraft Mod Studio</strong> a été créé pour rendre la création de Resource Packs accessible à tous.</p><p><strong>Comment ça fonctionne en pratique :</strong></p><ul><li><strong>Ouvrez l'app</strong> et créez un projet avec nom, version Minecraft et icône.</li><li><strong>Choisissez ce que vous voulez éditer</strong> — Blocs, Items, Mobs, GUI, Environnement.</li><li><strong>Utilisez l'Éditeur Pixel Art</strong> pour les textures 16×16 ou 32×32px avec crayon, remplissage, gomme et pipette.</li><li><strong>Pour les grandes textures</strong> (GUI, mobs), l'Image Editor s'ouvre en fenêtre séparée avec zoom.</li><li><strong>Modifiez les textes du jeu</strong> — renommez items, blocs et mobs en pt_BR ou en_US.</li><li><strong>Suivez tout dans le Workspace</strong> — chaque texture éditée apparaît comme carte.</li><li><strong>Exportez en un clic</strong> — génère un .zip prêt pour .minecraft/resourcepacks.</li></ul><p>Tout est gardé en mémoire. Aucun fichier temporaire jusqu'à l'export. Simple, rapide et sans complications.</p>`,
+      de:`<p><strong>Minecraft Mod Studio</strong> wurde entwickelt, um die Erstellung von Resource Packs für jeden zugänglich zu machen.</p><p><strong>So funktioniert es in der Praxis:</strong></p><ul><li><strong>Öffne die App</strong> und erstelle ein Projekt mit Name, Minecraft-Version und Symbol.</li><li><strong>Wähle was du bearbeiten möchtest</strong> — Blöcke, Items, Mobs, GUI, Umgebung.</li><li><strong>Verwende den Pixel Art Editor</strong> für 16×16 oder 32×32px Texturen mit Stift, Fülleimer, Radierer und Pipette.</li><li><strong>Für große Texturen</strong> (GUI, Mobs) öffnet sich der Image Editor in separatem Fenster mit Zoom.</li><li><strong>Bearbeite Spieltexte</strong> — benenne Items, Blöcke und Mobs in pt_BR oder en_US um.</li><li><strong>Verfolge alles im Workspace</strong> — jede bearbeitete Textur erscheint als Karte.</li><li><strong>Exportiere mit einem Klick</strong> — erzeugt eine .zip für .minecraft/resourcepacks.</li></ul><p>Alles wird im Speicher gehalten. Keine temporären Dateien bis zum Export. Einfach, schnell und unkompliziert.</p>`
     }
-  };
-
-  function openPost(id) {
-    const post = posts[id];
-    if (!post) return;
-    document.getElementById('modalBanner').className = 'blog-modal-banner ' + post.tag;
-    document.getElementById('modalMeta').innerHTML = `<span class="blog-tag ${post.tag}">${post.tagLabel}</span>`;
-    document.getElementById('modalTitle').textContent = post.title;
-    document.getElementById('modalDate').textContent = post.date;
-    document.getElementById('modalBody').innerHTML = post.body;
-    document.getElementById('blogModalOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
   }
+};
 
-  function closePost() {
-    document.getElementById('blogModalOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
+let currentLang = 'pt';
 
-  function closePostOnOverlay(e) {
-    if (e.target === document.getElementById('blogModalOverlay')) closePost();
-  }
+function setLang(lang) {
+  currentLang = lang;
+  const t = i18n[lang];
+  const m = langMeta[lang];
+  document.documentElement.lang = m.html;
+  document.getElementById('currentFlag').textContent = m.flag;
+  document.getElementById('currentLangLabel').textContent = m.label;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (t[k]) el.textContent = t[k]; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { const k = el.getAttribute('data-i18n-html'); if (t[k]) el.innerHTML = t[k]; });
+  document.querySelectorAll('.lang-option').forEach((el, i) => { const langs = ['pt','en','es','fr','de']; el.classList.toggle('active', langs[i] === lang); });
+  // Update blog post card
+  const p = postData.post1;
+  document.getElementById('post1Tag').textContent = p.tagLabel[lang];
+  document.getElementById('post1CardTitle').textContent = p.cardTitle[lang];
+  document.getElementById('post1CardDesc').textContent = p.cardDesc[lang];
+  document.getElementById('post1Date').textContent = p.date[lang];
+  closeLang();
+}
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePost(); });
+function toggleLang() { document.getElementById('langSwitcher').classList.toggle('open'); }
+function closeLang() { document.getElementById('langSwitcher').classList.remove('open'); }
+document.addEventListener('click', e => { if (!document.getElementById('langSwitcher').contains(e.target)) closeLang(); });
 
-  // ── Generate pixel grid mockup ─────────────────────────────────────────────
-  const PALETTE = [
-    '#6ab84a','#3aa12e','#1d7a25','#c89040',
-    '#835432','#e9b416','#178bc2','#d63e3e',
-    '#7dc553','#ffffff','#474f52','#000000',
-    '#c97836','#3c5fca','#f0a020','#8d8d8d',
-  ];
+function openPost(id) {
+  const p = postData[id];
+  const lang = currentLang;
+  document.getElementById('modalMeta').innerHTML = `<span class="blog-tag new">${p.tagLabel[lang]}</span>`;
+  document.getElementById('modalTitle').textContent = p.cardTitle[lang];
+  document.getElementById('modalDate').textContent = p.date[lang];
+  document.getElementById('modalBody').innerHTML = p.body[lang];
+  document.getElementById('blogModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePost() { document.getElementById('blogModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closePostOnOverlay(e) { if (e.target === document.getElementById('blogModalOverlay')) closePost(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePost(); });
 
-  const GRASS_COLORS = [
-    '#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#7dc553',
-    '#6ab84a','#5a9e3a','#7dc553','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553',
-    '#7dc553','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a',
-    '#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553','#5a9e3a',
-    '#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#7dc553','#5a9e3a','#6ab84a',
-    '#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553',
-    '#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553','#5a9e3a',
-    '#6ab84a','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553',
-    '#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#835432',
-    '#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a',
-    '#8a5a38','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a','#835432','#8a5a38',
-    '#835432','#7a4e2a','#8a5a38','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38',
-    '#7a4e2a','#8a5a38','#835432','#8a5a38','#7a4e2a','#8a5a38','#835432','#7a4e2a',
-    '#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#7a4e2a','#8a5a38','#835432',
-    '#835432','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432',
-    '#7a4e2a','#835432','#8a5a38','#835432','#8a5a38','#7a4e2a','#835432','#7a4e2a',
-  ];
+// Pixel grid
+const PALETTE = ['#6ab84a','#3aa12e','#1d7a25','#c89040','#835432','#e9b416','#178bc2','#d63e3e','#7dc553','#ffffff','#474f52','#000000','#c97836','#3c5fca','#f0a020','#8d8d8d'];
+const GRASS = ['#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#7dc553','#6ab84a','#5a9e3a','#7dc553','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#7dc553','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553','#5a9e3a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#7dc553','#5a9e3a','#6ab84a','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#5a9e3a','#6ab84a','#7dc553','#6ab84a','#7dc553','#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38','#835432','#7a4e2a','#835432','#8a5a38','#835432','#7a4e2a','#8a5a38','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38','#7a4e2a','#8a5a38','#835432','#8a5a38','#7a4e2a','#8a5a38','#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#7a4e2a','#8a5a38','#835432','#835432','#8a5a38','#7a4e2a','#835432','#7a4e2a','#8a5a38','#7a4e2a','#835432','#7a4e2a','#835432','#8a5a38','#835432','#8a5a38','#7a4e2a','#835432','#7a4e2a'];
+const grid = document.getElementById('pixelGrid');
+GRASS.forEach(c => { const px = document.createElement('div'); px.className='mock-pixel'; px.style.background=c; grid.appendChild(px); });
+const pal = document.getElementById('palette');
+PALETTE.forEach(c => { const sw = document.createElement('div'); sw.className='mock-pal-dot'; sw.style.background=c; sw.onclick=()=>{ document.getElementById('activeSwatch').style.background=c; }; pal.appendChild(sw); });
+const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+let pi=null;
+grid.addEventListener('mouseenter', () => { pi=setInterval(()=>{ const idx=Math.floor(Math.random()*256); const col=PALETTE[Math.floor(Math.random()*PALETTE.length)]; if(grid.children[idx]) grid.children[idx].style.background=col; },40); });
+grid.addEventListener('mouseleave', () => { clearInterval(pi); GRASS.forEach((c,i)=>{ if(grid.children[i]) grid.children[i].style.background=c; }); });
 
-  const grid = document.getElementById('pixelGrid');
-  GRASS_COLORS.forEach((c) => {
-    const px = document.createElement('div');
-    px.className = 'mock-pixel';
-    px.style.background = c;
-    grid.appendChild(px);
-  });
-
-  const pal = document.getElementById('palette');
-  PALETTE.forEach(c => {
-    const sw = document.createElement('div');
-    sw.className = 'mock-pal-dot';
-    sw.style.background = c;
-    sw.onclick = () => {
-      document.getElementById('activeSwatch').style.background = c;
-    };
-    pal.appendChild(sw);
-  });
-
-  // ── Scroll reveal ──────────────────────────────────────────────────────────
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); }
-    });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ── Animate pixel grid on hover ────────────────────────────────────────────
-  let paintInterval = null;
-  grid.addEventListener('mouseenter', () => {
-    paintInterval = setInterval(() => {
-      const idx = Math.floor(Math.random() * 256);
-      const col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-      if (grid.children[idx]) grid.children[idx].style.background = col;
-    }, 40);
-  });
-  grid.addEventListener('mouseleave', () => {
-    clearInterval(paintInterval);
-    GRASS_COLORS.forEach((c, i) => {
-      if (grid.children[i]) grid.children[i].style.background = c;
-    });
-  });
+// Auto-detect browser language
+const bl = navigator.language.slice(0,2);
+if (['en','es','fr','de'].includes(bl)) setLang(bl);
 </script>
 </body>
 </html>
