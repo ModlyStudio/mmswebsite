@@ -143,9 +143,11 @@
     .blog-card:hover { border-color: #3a3a3a; transform: translateY(-3px); }
     .blog-card-banner { height: 6px; }
     .blog-card-banner.new { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
+    .blog-card-banner-img { width: 100%; height: 160px; object-fit: cover; display: block; }
     .blog-card-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
     .blog-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 16px; width: fit-content; }
     .blog-tag.new { background: rgba(106,184,74,0.12); color: var(--green); border: 1px solid rgba(106,184,74,0.25); }
+    .blog-tag.update { background: rgba(200,144,64,0.12); color: var(--amber); border: 1px solid rgba(200,144,64,0.25); }
     .blog-card-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
     .blog-card-desc { font-size: 0.875rem; color: #666; line-height: 1.65; flex: 1; }
     .blog-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
@@ -159,8 +161,9 @@
     .blog-modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; max-width: 680px; width: 100%; position: relative; animation: fadeUp 0.3s ease both; }
     .blog-modal-banner { height: 8px; border-radius: 18px 18px 0 0; }
     .blog-modal-banner.new { background: linear-gradient(90deg, var(--green), var(--green-lt)); }
+    .blog-modal-banner-img { width: 100%; height: 200px; object-fit: cover; border-radius: 18px 18px 0 0; display: block; }
     .blog-modal-content { padding: 40px; }
-    .blog-modal-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 16px; cursor: pointer; display: grid; place-items: center; transition: background 0.15s, color 0.15s; }
+    .blog-modal-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 16px; cursor: pointer; display: grid; place-items: center; transition: background 0.15s, color 0.15s; z-index: 10; }
     .blog-modal-close:hover { background: #2a2a2a; color: var(--text); }
     .blog-modal-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
     .blog-modal-title { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 8px; }
@@ -313,6 +316,22 @@
     <h2 class="section-title" data-i18n="blog.title">Novidades & Atualizações</h2>
     <p class="section-sub" data-i18n="blog.sub">Acompanhe o progresso do desenvolvimento, novas funcionalidades e anúncios importantes.</p>
     <div class="blog-grid reveal" id="blogGrid">
+
+      <!-- POST 2 — Sprint 1 to 3 (com banner) -->
+      <div class="blog-card" onclick="openPost('post2')">
+        <img class="blog-card-banner-img" src="BlogBannerMMS.png" alt="Sprint 1 to 3 Banner" />
+        <div class="blog-card-body">
+          <span class="blog-tag update" id="post2Tag">🚀 Update</span>
+          <div class="blog-card-title" id="post2CardTitle">Sprint 1 to 3</div>
+          <div class="blog-card-desc" id="post2CardDesc">Confira tudo o que foi desenvolvido nos três primeiros sprints do Minecraft Mod Studio: da interface base ao editor de texturas completo.</div>
+          <div class="blog-card-footer">
+            <span class="blog-date" id="post2Date">03 Abr 2025</span>
+            <span class="blog-read-more" data-i18n="blog.readmore">Ler mais →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST 1 — Como o app funciona -->
       <div class="blog-card" onclick="openPost('post1')" style="max-width:480px">
         <div class="blog-card-banner new"></div>
         <div class="blog-card-body">
@@ -325,6 +344,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -366,7 +386,7 @@
 
 <div class="blog-modal-overlay" id="blogModalOverlay" onclick="closePostOnOverlay(event)">
   <div class="blog-modal">
-    <div class="blog-modal-banner new"></div>
+    <div id="modalBannerWrap"></div>
     <div class="blog-modal-content">
       <button class="blog-modal-close" onclick="closePost()">✕</button>
       <div class="blog-modal-meta" id="modalMeta"></div>
@@ -552,6 +572,8 @@ const langMeta = {
 const postData = {
   post1: {
     tagLabel:{ pt:'📖 Guia', en:'📖 Guide', es:'📖 Guía', fr:'📖 Guide', de:'📖 Guide' },
+    tagClass:'new',
+    banner: null,
     cardTitle:{ pt:'Como o Minecraft Mod Studio funciona', en:'How Minecraft Mod Studio works', es:'Cómo funciona Minecraft Mod Studio', fr:'Comment fonctionne Minecraft Mod Studio', de:'Wie Minecraft Mod Studio funktioniert' },
     cardDesc:{ pt:'Entenda como o app funciona por dentro: do editor de pixel art até a exportação do seu resource pack pronto para jogar.', en:'Understand how the app works internally: from the pixel art editor to exporting your resource pack ready to play.', es:'Entiende cómo funciona la app por dentro: desde el editor de pixel art hasta la exportación de tu resource pack.', fr:"Comprenez comment l'app fonctionne en interne : de l'éditeur pixel art jusqu'à l'export de votre resource pack.", de:'Verstehe wie die App intern funktioniert: vom Pixel Art Editor bis zum Export deines Resource Packs.' },
     date:{ pt:'23 de Março de 2025', en:'March 23, 2025', es:'23 de Marzo de 2025', fr:'23 Mars 2025', de:'23. März 2025' },
@@ -561,6 +583,142 @@ const postData = {
       es:`<p><strong>Minecraft Mod Studio</strong> fue creado para hacer que la creación de Resource Packs sea accesible para cualquier persona.</p><p><strong>Cómo funciona en la práctica:</strong></p><ul><li><strong>Abre la app</strong> y crea un nuevo proyecto con nombre, versión de Minecraft e icono.</li><li><strong>Elige qué editar</strong> — navega por categorías: Bloques, Ítems, Mobs, GUI y Ambiente.</li><li><strong>Usa el Editor de Pixel Art</strong> para texturas 16×16 o 32×32px con lápiz, relleno, borrador y cuentagotas.</li><li><strong>Para texturas grandes</strong> (GUI, mobs), el Image Editor abre en ventana separada con zoom.</li><li><strong>Edita los textos del juego</strong> — renombra ítems, bloques y mobs en pt_BR o en_US.</li><li><strong>Sigue todo en el Workspace</strong> — cada textura editada aparece como tarjeta para fácil reedición.</li><li><strong>Exporta con un clic</strong> — genera un .zip listo para instalar en .minecraft/resourcepacks.</li></ul><p>Todo se mantiene en memoria. Sin archivos temporales hasta que exportes. Simple, rápido y sin complicaciones.</p>`,
       fr:`<p><strong>Minecraft Mod Studio</strong> a été créé pour rendre la création de Resource Packs accessible à tous.</p><p><strong>Comment ça fonctionne en pratique :</strong></p><ul><li><strong>Ouvrez l'app</strong> et créez un projet avec nom, version Minecraft et icône.</li><li><strong>Choisissez ce que vous voulez éditer</strong> — Blocs, Items, Mobs, GUI, Environnement.</li><li><strong>Utilisez l'Éditeur Pixel Art</strong> pour les textures 16×16 ou 32×32px avec crayon, remplissage, gomme et pipette.</li><li><strong>Pour les grandes textures</strong> (GUI, mobs), l'Image Editor s'ouvre en fenêtre séparée avec zoom.</li><li><strong>Modifiez les textes du jeu</strong> — renommez items, blocs et mobs en pt_BR ou en_US.</li><li><strong>Suivez tout dans le Workspace</strong> — chaque texture éditée apparaît comme carte.</li><li><strong>Exportez en un clic</strong> — génère un .zip prêt pour .minecraft/resourcepacks.</li></ul><p>Tout est gardé en mémoire. Aucun fichier temporaire jusqu'à l'export. Simple, rapide et sans complications.</p>`,
       de:`<p><strong>Minecraft Mod Studio</strong> wurde entwickelt, um die Erstellung von Resource Packs für jeden zugänglich zu machen.</p><p><strong>So funktioniert es in der Praxis:</strong></p><ul><li><strong>Öffne die App</strong> und erstelle ein Projekt mit Name, Minecraft-Version und Symbol.</li><li><strong>Wähle was du bearbeiten möchtest</strong> — Blöcke, Items, Mobs, GUI, Umgebung.</li><li><strong>Verwende den Pixel Art Editor</strong> für 16×16 oder 32×32px Texturen mit Stift, Fülleimer, Radierer und Pipette.</li><li><strong>Für große Texturen</strong> (GUI, Mobs) öffnet sich der Image Editor in separatem Fenster mit Zoom.</li><li><strong>Bearbeite Spieltexte</strong> — benenne Items, Blöcke und Mobs in pt_BR oder en_US um.</li><li><strong>Verfolge alles im Workspace</strong> — jede bearbeitete Textur erscheint als Karte.</li><li><strong>Exportiere mit einem Klick</strong> — erzeugt eine .zip für .minecraft/resourcepacks.</li></ul><p>Alles wird im Speicher gehalten. Keine temporären Dateien bis zum Export. Einfach, schnell und unkompliziert.</p>`
+    }
+  },
+  post2: {
+    tagLabel:{ pt:'🚀 Update', en:'🚀 Update', es:'🚀 Update', fr:'🚀 Update', de:'🚀 Update' },
+    tagClass:'update',
+    banner: 'BlogBannerMMS.png',
+    cardTitle:{ pt:'Sprint 1 to 3', en:'Sprint 1 to 3', es:'Sprint 1 to 3', fr:'Sprint 1 to 3', de:'Sprint 1 to 3' },
+    cardDesc:{
+      pt:'Confira tudo o que foi desenvolvido nos três primeiros sprints do Minecraft Mod Studio: da interface base ao editor de texturas completo.',
+      en:'See everything developed across the first three sprints of Minecraft Mod Studio: from the base interface to the complete texture editor.',
+      es:'Mira todo lo desarrollado en los tres primeros sprints de Minecraft Mod Studio: desde la interfaz base hasta el editor de texturas completo.',
+      fr:"Découvrez tout ce qui a été développé lors des trois premiers sprints de Minecraft Mod Studio : de l'interface de base à l'éditeur de textures complet.",
+      de:'Schau dir alles an, was in den ersten drei Sprints von Minecraft Mod Studio entwickelt wurde: von der Basisoberfläche bis zum vollständigen Textur-Editor.'
+    },
+    date:{ pt:'03 de Abril de 2025', en:'April 3, 2025', es:'3 de Abril de 2025', fr:'3 Avril 2025', de:'3. April 2025' },
+    body:{
+      pt:`<p>Os três primeiros sprints do <strong>Minecraft Mod Studio</strong> marcam a fundação do projeto — da tela em branco a um app funcional com editor de texturas completo.</p>
+<p><strong>Sprint 1 — Interface Base</strong></p>
+<ul>
+  <li>Estrutura principal da janela com navegação por abas</li>
+  <li>Editor de Idioma com suporte a <strong>pt_BR</strong> e <strong>en_US</strong> (200+ chaves)</li>
+  <li>Ícone do Resource Pack customizável</li>
+  <li>Painel de Configurações com opção de reinício</li>
+  <li>Sistema de logs para rastreamento de ações</li>
+</ul>
+<p><strong>Sprint 2 — Texturas</strong></p>
+<ul>
+  <li>Categorias completas: Blocos, Itens, Mobs, GUI e Ambiente</li>
+  <li><strong>Pixel Editor</strong> para texturas até 32×32px com lápis, balde, borracha e conta-gotas</li>
+  <li><strong>Image Editor</strong> em janela popup para texturas grandes (64px+) com zoom via scroll</li>
+  <li>Workspace visual com cards para cada textura editada</li>
+  <li>Exportação ZIP pronta para instalar no Minecraft</li>
+</ul>
+<p><strong>Sprint 3 — Animações (em andamento)</strong></p>
+<ul>
+  <li>Editor de frames com preview em tempo real</li>
+  <li>Geração automática de arquivos <strong>.mcmeta</strong></li>
+  <li>Suporte a texturas animadas como lava e água</li>
+</ul>
+<p>O projeto evolui sprint a sprint. Acompanhe o roadmap para ver o que vem a seguir.</p>`,
+      en:`<p>The first three sprints of <strong>Minecraft Mod Studio</strong> lay the project's foundation — from a blank screen to a functional app with a complete texture editor.</p>
+<p><strong>Sprint 1 — Base Interface</strong></p>
+<ul>
+  <li>Main window structure with tab navigation</li>
+  <li>Language Editor supporting <strong>pt_BR</strong> and <strong>en_US</strong> (200+ keys)</li>
+  <li>Customizable Resource Pack icon</li>
+  <li>Settings panel with restart option</li>
+  <li>Log system for action tracking</li>
+</ul>
+<p><strong>Sprint 2 — Textures</strong></p>
+<ul>
+  <li>Full categories: Blocks, Items, Mobs, GUI and Environment</li>
+  <li><strong>Pixel Editor</strong> for textures up to 32×32px with pencil, fill, eraser and eyedropper</li>
+  <li><strong>Image Editor</strong> in popup window for large textures (64px+) with scroll zoom</li>
+  <li>Visual Workspace with cards for each edited texture</li>
+  <li>ZIP export ready to install in Minecraft</li>
+</ul>
+<p><strong>Sprint 3 — Animations (in progress)</strong></p>
+<ul>
+  <li>Frame editor with real-time preview</li>
+  <li>Automatic <strong>.mcmeta</strong> file generation</li>
+  <li>Support for animated textures like lava and water</li>
+</ul>
+<p>The project evolves sprint by sprint. Check the roadmap to see what comes next.</p>`,
+      es:`<p>Los tres primeros sprints de <strong>Minecraft Mod Studio</strong> establecen los cimientos del proyecto — de una pantalla en blanco a una app funcional con editor de texturas completo.</p>
+<p><strong>Sprint 1 — Interfaz Base</strong></p>
+<ul>
+  <li>Estructura principal con navegación por pestañas</li>
+  <li>Editor de Idioma con soporte <strong>pt_BR</strong> y <strong>en_US</strong> (200+ claves)</li>
+  <li>Icono del Resource Pack personalizable</li>
+  <li>Panel de Ajustes con opción de reinicio</li>
+  <li>Sistema de registros para seguimiento de acciones</li>
+</ul>
+<p><strong>Sprint 2 — Texturas</strong></p>
+<ul>
+  <li>Categorías completas: Bloques, Ítems, Mobs, GUI y Ambiente</li>
+  <li><strong>Pixel Editor</strong> para texturas hasta 32×32px con lápiz, relleno, borrador y cuentagotas</li>
+  <li><strong>Image Editor</strong> en ventana emergente para texturas grandes (64px+) con zoom</li>
+  <li>Workspace visual con tarjetas por textura editada</li>
+  <li>Exportación ZIP lista para instalar en Minecraft</li>
+</ul>
+<p><strong>Sprint 3 — Animaciones (en progreso)</strong></p>
+<ul>
+  <li>Editor de frames con vista previa en tiempo real</li>
+  <li>Generación automática de archivos <strong>.mcmeta</strong></li>
+  <li>Soporte para texturas animadas como lava y agua</li>
+</ul>
+<p>El proyecto evoluciona sprint a sprint. Consulta el roadmap para ver qué sigue.</p>`,
+      fr:`<p>Les trois premiers sprints de <strong>Minecraft Mod Studio</strong> posent les fondations du projet — d'un écran vide à une app fonctionnelle avec éditeur de textures complet.</p>
+<p><strong>Sprint 1 — Interface de Base</strong></p>
+<ul>
+  <li>Structure principale avec navigation par onglets</li>
+  <li>Éditeur de langue avec support <strong>pt_BR</strong> et <strong>en_US</strong> (200+ clés)</li>
+  <li>Icône du Resource Pack personnalisable</li>
+  <li>Panneau de paramètres avec option de redémarrage</li>
+  <li>Système de logs pour le suivi des actions</li>
+</ul>
+<p><strong>Sprint 2 — Textures</strong></p>
+<ul>
+  <li>Catégories complètes : Blocs, Items, Mobs, GUI et Environnement</li>
+  <li><strong>Pixel Editor</strong> pour textures jusqu'à 32×32px avec crayon, remplissage, gomme et pipette</li>
+  <li><strong>Image Editor</strong> en popup pour grandes textures (64px+) avec zoom</li>
+  <li>Workspace visuel avec cartes par texture éditée</li>
+  <li>Export ZIP prêt à installer dans Minecraft</li>
+</ul>
+<p><strong>Sprint 3 — Animations (en cours)</strong></p>
+<ul>
+  <li>Éditeur de frames avec aperçu en temps réel</li>
+  <li>Génération automatique des fichiers <strong>.mcmeta</strong></li>
+  <li>Support des textures animées comme la lave et l'eau</li>
+</ul>
+<p>Le projet évolue sprint par sprint. Consultez la roadmap pour voir la suite.</p>`,
+      de:`<p>Die ersten drei Sprints von <strong>Minecraft Mod Studio</strong> legen das Fundament des Projekts — von einem leeren Bildschirm zu einer funktionalen App mit vollständigem Textur-Editor.</p>
+<p><strong>Sprint 1 — Basisoberfläche</strong></p>
+<ul>
+  <li>Hauptfensterstruktur mit Tab-Navigation</li>
+  <li>Spracheditor mit Unterstützung für <strong>pt_BR</strong> und <strong>en_US</strong> (200+ Schlüssel)</li>
+  <li>Anpassbares Resource Pack Symbol</li>
+  <li>Einstellungsbereich mit Neustart-Option</li>
+  <li>Log-System zur Aktionsverfolgung</li>
+</ul>
+<p><strong>Sprint 2 — Texturen</strong></p>
+<ul>
+  <li>Vollständige Kategorien: Blöcke, Items, Mobs, GUI und Umgebung</li>
+  <li><strong>Pixel Editor</strong> für Texturen bis 32×32px mit Stift, Fülleimer, Radierer und Pipette</li>
+  <li><strong>Image Editor</strong> im Popup-Fenster für große Texturen (64px+) mit Zoom</li>
+  <li>Visueller Workspace mit Karten für jede bearbeitete Textur</li>
+  <li>ZIP-Export fertig zur Installation in Minecraft</li>
+</ul>
+<p><strong>Sprint 3 — Animationen (in Bearbeitung)</strong></p>
+<ul>
+  <li>Frame-Editor mit Echtzeit-Vorschau</li>
+  <li>Automatische Generierung von <strong>.mcmeta</strong>-Dateien</li>
+  <li>Unterstützung für animierte Texturen wie Lava und Wasser</li>
+</ul>
+<p>Das Projekt entwickelt sich Sprint für Sprint. Schau dir die Roadmap an, um zu sehen, was als nächstes kommt.</p>`
     }
   }
 };
@@ -577,12 +735,18 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (t[k]) el.textContent = t[k]; });
   document.querySelectorAll('[data-i18n-html]').forEach(el => { const k = el.getAttribute('data-i18n-html'); if (t[k]) el.innerHTML = t[k]; });
   document.querySelectorAll('.lang-option').forEach((el, i) => { const langs = ['pt','en','es','fr','de']; el.classList.toggle('active', langs[i] === lang); });
-  // Update blog post card
-  const p = postData.post1;
-  document.getElementById('post1Tag').textContent = p.tagLabel[lang];
-  document.getElementById('post1CardTitle').textContent = p.cardTitle[lang];
-  document.getElementById('post1CardDesc').textContent = p.cardDesc[lang];
-  document.getElementById('post1Date').textContent = p.date[lang];
+  // Update blog post cards
+  ['post1','post2'].forEach(id => {
+    const p = postData[id];
+    const tagEl = document.getElementById(id+'Tag');
+    const titleEl = document.getElementById(id+'CardTitle');
+    const descEl = document.getElementById(id+'CardDesc');
+    const dateEl = document.getElementById(id+'Date');
+    if (tagEl) tagEl.textContent = p.tagLabel[lang];
+    if (titleEl) titleEl.textContent = p.cardTitle[lang];
+    if (descEl) descEl.textContent = p.cardDesc[lang];
+    if (dateEl) dateEl.textContent = p.date[lang];
+  });
   closeLang();
 }
 
@@ -593,7 +757,13 @@ document.addEventListener('click', e => { if (!document.getElementById('langSwit
 function openPost(id) {
   const p = postData[id];
   const lang = currentLang;
-  document.getElementById('modalMeta').innerHTML = `<span class="blog-tag new">${p.tagLabel[lang]}</span>`;
+  const bannerWrap = document.getElementById('modalBannerWrap');
+  if (p.banner) {
+    bannerWrap.innerHTML = `<img class="blog-modal-banner-img" src="${p.banner}" alt="Banner" />`;
+  } else {
+    bannerWrap.innerHTML = `<div class="blog-modal-banner ${p.tagClass}"></div>`;
+  }
+  document.getElementById('modalMeta').innerHTML = `<span class="blog-tag ${p.tagClass}">${p.tagLabel[lang]}</span>`;
   document.getElementById('modalTitle').textContent = p.cardTitle[lang];
   document.getElementById('modalDate').textContent = p.date[lang];
   document.getElementById('modalBody').innerHTML = p.body[lang];
