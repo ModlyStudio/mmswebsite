@@ -641,8 +641,10 @@ grid.addEventListener('mouseenter', () => { pi=setInterval(()=>{ const idx=Math.
 grid.addEventListener('mouseleave', () => { clearInterval(pi); GRASS.forEach((c,i)=>{ if(grid.children[i]) grid.children[i].style.background=c; }); });
 
 // Auto-detect browser language
-const bl = navigator.language.slice(0,2);
-if (['en','es','fr','de'].includes(bl)) setLang(bl);
+const supportedLangs = ['pt', 'en', 'es', 'fr', 'de'];
+const browserLang = navigator.language.toLowerCase();
+const detectedLang = supportedLangs.find(l => browserLang.startsWith(l)) || 'pt';
+setLang(detectedLang);
 </script>
 </body>
 </html>
